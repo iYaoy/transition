@@ -14,11 +14,11 @@ class RectTransition : Transition() {
     private val propertyColor = "rectColor"
     private val propertyRadius = "rectRadius"
 
-    init {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            addTarget(RectView::class.java)
-        }
-    }
+//    init {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            addTarget(RectView::class.java)
+//        }
+//    }
 
     override fun captureEndValues(transitionValues: TransitionValues) {
         captureValues(transitionValues)
@@ -31,7 +31,7 @@ class RectTransition : Transition() {
 
 
     private fun captureValues(transitionValues: TransitionValues) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && transitionValues.view !is RectView) {
+        if (transitionValues.view !is RectView) {
             return
         }
         val rectView = transitionValues.view as RectView
@@ -40,32 +40,33 @@ class RectTransition : Transition() {
     }
 
     override fun createAnimator(sceneRoot: ViewGroup, startValues: TransitionValues?, endValues: TransitionValues?): Animator? {
-        if(startValues == null || endValues == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP &&
-                (startValues.view !is RectView || endValues.view !is RectView)) {
-            return null
-        }
-        val startColor: Int = startValues.values[propertyColor] as Int
-        val endColor: Int = endValues.values[propertyColor] as Int
-        val startRadius = startValues.values[propertyRadius] as Float
-        val endRadius = endValues.values[propertyRadius] as Float
-        val rectView = endValues.view as RectView
-        var radiusAnimator : Animator? = null
-        var argbAnimator : Animator? = null
-        if (startRadius != endRadius) {
-            rectView.radius = startRadius
-            radiusAnimator = createRadiusAnimator(rectView, startRadius, endRadius)
-        }
-        if (startColor != endColor) {
-            rectView.color = startColor
-            argbAnimator = createArgbAnimator(rectView, startColor, endColor)
-        }
         return when {
-            radiusAnimator != null && argbAnimator != null -> {
-                AnimatorSet().apply {
-                    playTogether(radiusAnimator, argbAnimator)
+            startValues?.view is RectView && endValues?.view is RectView -> {
+                val startColor: Int = startValues.values[propertyColor] as Int
+                val endColor: Int = endValues.values[propertyColor] as Int
+                val startRadius = startValues.values[propertyRadius] as Float
+                val endRadius = endValues.values[propertyRadius] as Float
+                val rectView = endValues.view as RectView
+                var radiusAnimator : Animator? = null
+                var argbAnimator : Animator? = null
+                if (startRadius != endRadius) {
+                    rectView.radius = startRadius
+                    radiusAnimator = createRadiusAnimator(rectView, startRadius, endRadius)
+                }
+                if (startColor != endColor) {
+                    rectView.color = startColor
+                    argbAnimator = createArgbAnimator(rectView, startColor, endColor)
+                }
+                when {
+                    radiusAnimator != null && argbAnimator != null -> {
+                        AnimatorSet().apply {
+                            playTogether(radiusAnimator, argbAnimator)
+                        }
+                    }
+                    else -> radiusAnimator ?: argbAnimator
                 }
             }
-            else -> radiusAnimator ?: argbAnimator
+            else -> null
         }
     }
 
