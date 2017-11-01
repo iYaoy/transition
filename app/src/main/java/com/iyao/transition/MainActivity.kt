@@ -1,9 +1,10 @@
 package com.iyao.transition
 
 import android.os.Bundle
-import android.support.transition.*
-import android.support.transition.TransitionSet.ORDERING_TOGETHER
 import android.support.v7.app.AppCompatActivity
+import android.transition.*
+import android.transition.TransitionSet.ORDERING_TOGETHER
+import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     private val listenerB = object : TransitionListenerAdapter() {
         override fun onTransitionEnd(transition: Transition) {
             transition.removeListener(this)
-//            runnableSceneA.run()
+            runnableSceneA.run()
         }
     }
 
@@ -52,7 +53,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initial() {
-        sceneA = Scene(layoutSceneRoot, layoutSceneA)
+        @Suppress("DEPRECATION")
+        sceneA = Scene(layoutSceneRoot, layoutSceneA as ViewGroup)
         sceneB = Scene.getSceneForLayout(layoutSceneRoot, R.layout.scene_b, this)
+    }
+    open class TransitionListenerAdapter : Transition.TransitionListener {
+        override fun onTransitionEnd(transition: Transition) {
+        }
+
+        override fun onTransitionResume(transition: Transition) {
+        }
+
+        override fun onTransitionPause(transition: Transition) {
+        }
+
+        override fun onTransitionCancel(transition: Transition) {
+        }
+
+        override fun onTransitionStart(transition: Transition) {
+        }
+
     }
 }

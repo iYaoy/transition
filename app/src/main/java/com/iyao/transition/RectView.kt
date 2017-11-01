@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
-import android.support.transition.Transition
 import android.util.AttributeSet
 import android.view.View
 

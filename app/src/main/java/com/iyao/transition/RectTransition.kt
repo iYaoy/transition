@@ -5,8 +5,8 @@ import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.os.Build
-import android.support.transition.Transition
-import android.support.transition.TransitionValues
+import android.transition.Transition
+import android.transition.TransitionValues
 import android.view.ViewGroup
 
 class RectTransition : Transition() {
@@ -15,7 +15,9 @@ class RectTransition : Transition() {
     private val propertyRadius = "rectRadius"
 
     init {
-        addTarget(RectView::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            addTarget(RectView::class.java)
+        }
     }
 
     override fun captureEndValues(transitionValues: TransitionValues) {
@@ -29,13 +31,17 @@ class RectTransition : Transition() {
 
 
     private fun captureValues(transitionValues: TransitionValues) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && transitionValues.view !is RectView) {
+            return
+        }
         val rectView = transitionValues.view as RectView
         transitionValues.values.put(propertyRadius, rectView.radius)
         transitionValues.values.put(propertyColor, rectView.color)
     }
 
-    override fun createAnimator(sceneRoot: ViewGroup, startValues: TransitionValues?, endValues: TransitionValues?): Animator? {
-        if(endValues == null || startValues == null) {
+    override fun createAnimator(sceneRoot: ViewGroup, startValues: TransitionValues, endValues: TransitionValues): Animator? {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP &&
+                (startValues.view !is RectView || endValues.view !is RectView)) {
             return null
         }
         val startColor: Int = startValues.values[propertyColor] as Int
