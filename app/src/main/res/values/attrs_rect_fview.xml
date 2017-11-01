@@ -1,0 +1,6 @@
+<resources>
+    <declare-styleable name="RectView">
+        <attr name="rectRadius" format="dimension" />
+        <attr name="rectColor" format="color" />
+    </declare-styleable>
+</resources>
