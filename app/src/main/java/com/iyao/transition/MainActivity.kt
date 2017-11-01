@@ -57,6 +57,11 @@ class MainActivity : AppCompatActivity() {
         sceneA = Scene(layoutSceneRoot, layoutSceneA as ViewGroup)
         sceneB = Scene.getSceneForLayout(layoutSceneRoot, R.layout.scene_b, this)
     }
+
+    /**
+     * 	android.transition.TransitionListenerAdapter added in API level 26, so
+     * 	i have to implement one
+     */
     open class TransitionListenerAdapter : Transition.TransitionListener {
         override fun onTransitionEnd(transition: Transition) {
         }
