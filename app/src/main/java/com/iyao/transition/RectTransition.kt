@@ -39,8 +39,8 @@ class RectTransition : Transition() {
         transitionValues.values.put(propertyColor, rectView.color)
     }
 
-    override fun createAnimator(sceneRoot: ViewGroup, startValues: TransitionValues, endValues: TransitionValues): Animator? {
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP &&
+    override fun createAnimator(sceneRoot: ViewGroup, startValues: TransitionValues?, endValues: TransitionValues?): Animator? {
+        if(startValues == null || endValues == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP &&
                 (startValues.view !is RectView || endValues.view !is RectView)) {
             return null
         }
