@@ -4,28 +4,21 @@ import ArgbEvaluator
 import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.content.Context
 import android.os.Build
 import android.transition.Transition
 import android.transition.TransitionValues
-import android.util.AttributeSet
 import android.view.ViewGroup
 
-class ChangeRectRadiusAndColor : Transition {
+class ChangeRectRadiusAndColor : Transition() {
 
     private val propertyRadius = "com.iyao.transition:RectView:radius"
     private val propertyColor = "com.iyao.transition:RectView:color"
-
-    constructor() : super()
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-
 
     init {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             addTarget(RectView::class.java)
         }
     }
-
 
     override fun captureEndValues(transitionValues: TransitionValues) {
         captureValues(transitionValues)
