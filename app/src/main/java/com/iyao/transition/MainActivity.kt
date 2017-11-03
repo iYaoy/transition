@@ -1,5 +1,6 @@
 package com.iyao.transition
 
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.transition.*
@@ -36,10 +37,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val transitionSet = TransitionSet().apply {
-        addTransition(RectTransition())
+        addTransition(ChangeRectRadiusAndColor())
         addTransition(ChangeBounds())
         ordering = ORDERING_TOGETHER
         duration = 3000
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            pathMotion = ArcMotion()
+        }
         interpolator = AccelerateDecelerateInterpolator()
     }
 
